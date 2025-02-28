@@ -66,6 +66,7 @@ public class Board extends Subject {
      *
      * @return how many moves have been made so far
      */
+
     public int getCounter() {
         return this.counter;
     }
@@ -81,6 +82,16 @@ public class Board extends Subject {
             notifyChange(); // so the GUI sees the updated count
         }
     }
+
+    /**
+     * Convenience method to increment the move counter by one,
+     * then notify the observers.
+     */
+    public void incrementCounter() {
+        this.counter++;
+        notifyChange();
+    }
+
 
     public Player getNextPlayer() {
         if (players.size() <= 1 || current == null) {
@@ -242,13 +253,20 @@ public class Board extends Subject {
     }
 
     public String getStatusMessage() {
-        // this is actually a view aspect, but for making assignment V1 easy for
-        // the students, this method gives a string representation of the current
-        // status of the game
+        // Some existing message logic here:
+        String currentStatus = "";
+
+        if (current != null) {
+            currentStatus = "Current Player: " + current.getName();
+        } else {
+            currentStatus = "No current player found";
+        }
 
         // TODO V1: add the move count to the status message
-        // TODO V2: changed the status so that it shows the phase, the current player, and the current register
-        return "Player = " + getCurrentPlayer().getName();
+        currentStatus += " | Moves so far: " + counter;
+
+        return currentStatus;
     }
+
 
 }
