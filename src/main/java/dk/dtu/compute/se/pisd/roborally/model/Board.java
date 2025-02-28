@@ -59,6 +59,42 @@ public class Board extends Subject {
 
     private boolean stepMode;
 
+    // existing fields...
+    private int counter = 0; // <--- move counter
+    /**
+     * Returns the current move counter.
+     *
+     * @return how many moves have been made so far
+     */
+    public int getCounter() {
+        return this.counter;
+    }
+
+    /**
+     * Sets a new value for the move counter and notifies observers of the change.
+     *
+     * @param newValue new move count
+     */
+    public void setCounter(int newValue) {
+        if (this.counter != newValue) {
+            this.counter = newValue;
+            notifyChange(); // so the GUI sees the updated count
+        }
+    }
+
+    public Player getNextPlayer() {
+        if (players.size() <= 1 || current == null) {
+            return current; // edge case
+        }
+        int currentIndex = players.indexOf(current);
+        if (currentIndex < 0) {
+            return current; // or null, depending on your logic
+        }
+        int nextIndex = (currentIndex + 1) % players.size();
+        return players.get(nextIndex);
+    }
+
+
     public Board(int width, int height, @NotNull String boardName) {
         this.boardName = boardName;
         this.width = width;
