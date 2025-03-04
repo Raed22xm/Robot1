@@ -68,6 +68,7 @@ public class GameController {
 
             // 6. Switch the current player to whoever comes next
             //    (Implementation depends on how 'next player' is determined)
+
             board.setCurrentPlayer(board.getNextPlayer());
 
             // If you need the GUI to update immediately:

@@ -28,6 +28,12 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import org.jetbrains.annotations.NotNull;
+import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
+import dk.dtu.compute.se.pisd.roborally.controller.Checkpoint; // Import Checkpoint
+import javafx.scene.text.Text;
+import javafx.scene.paint.Color;
+import dk.dtu.compute.se.pisd.roborally.model.Heading;
+
 
 /**
  * ...
@@ -90,12 +96,59 @@ public class SpaceView extends StackPane implements ViewObserver {
         if (subject == this.space) {
             this.getChildren().clear();
 
-            // XXX A3: drawing walls and action on the space (could be done
-            //         here); it would be even better if fixed things on
-            //         spaces  are only drawn once (and not on every update)
-
+            // Maintain the existing player rendering
             updatePlayer();
+
+            // ✅ Debugging: Check if updateView is called
+            System.out.println("🔄 Updating space at (" + space.x + ", " + space.y + ")");
+
+            // ✅ Render Walls
+            for (Heading heading : space.getWalls()) {
+                System.out.println("🧱 Rendering Wall at (" + space.x + ", " + space.y + ") facing " + heading);
+
+                javafx.scene.shape.Rectangle wall = new javafx.scene.shape.Rectangle(10, 30, Color.BLUE);
+
+                switch (heading) {
+                    case NORTH:
+                        wall.setWidth(30);
+                        wall.setHeight(5);
+                        wall.setTranslateY(-SPACE_HEIGHT / 2 + 2.5);
+                        break;
+                    case SOUTH:
+                        wall.setWidth(30);
+                        wall.setHeight(5);
+                        wall.setTranslateY(SPACE_HEIGHT / 2 - 2.5);
+                        break;
+                    case EAST:
+                        wall.setWidth(5);
+                        wall.setHeight(30);
+                        wall.setTranslateX(SPACE_WIDTH / 2 - 2.5);
+                        break;
+                    case WEST:
+                        wall.setWidth(5);
+                        wall.setHeight(30);
+                        wall.setTranslateX(-SPACE_WIDTH / 2 + 2.5);
+                        break;
+                }
+
+                this.getChildren().add(wall);
+            }
+
+            // ✅ Render Checkpoints
+            for (FieldAction action : space.getActions()) {
+                if (action instanceof Checkpoint) {
+                    Checkpoint checkpoint = (Checkpoint) action;
+                    System.out.println("🏁 Rendering Checkpoint at (" + space.x + ", " + space.y + ")");
+
+                    // Display a red "C" followed by the checkpoint number
+                    Text checkpointText = new Text("C" + checkpoint.getNumber());
+                    checkpointText.setFill(Color.RED);
+                    this.getChildren().add(checkpointText);
+                }
+            }
         }
     }
+
+
 
 }
