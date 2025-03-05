@@ -85,7 +85,11 @@ public class BoardFactory {
         addWall(board, 1, 0, Heading.NORTH);
         addWall(board, 1, 1, Heading.WEST);
         addWall(board, 5, 5, Heading.SOUTH);
-
+        // 🔹 Add Conveyor Belts
+        addConveyorBelt(board, 3, 3, Heading.NORTH);
+        addConveyorBelt(board, 2, 4, Heading.EAST);
+        addConveyorBelt(board, 5, 5, Heading.SOUTH);
+        addConveyorBelt(board, 6, 2, Heading.WEST);
 
         // add some walls, actions and checkpoints to some spaces
         Space space = board.getSpace(0,0);
@@ -133,6 +137,14 @@ public class BoardFactory {
             // Add a wall in the specified direction to that space
             space.getWalls().add(heading);
         }
+    }
+
+    // ✅ Helper method to add conveyor belts
+    private void addConveyorBelt(Board board, int x, int y, Heading direction) {
+        ConveyorBelt conveyor = new ConveyorBelt();
+        conveyor.setHeading(direction);
+        board.getSpace(x, y).getActions().add(conveyor);
+        System.out.println("🔄 Conveyor Belt added at (" + x + ", " + y + ") heading " + direction);
     }
 
 }

@@ -33,6 +33,12 @@ import dk.dtu.compute.se.pisd.roborally.controller.Checkpoint; // Import Checkpo
 import javafx.scene.text.Text;
 import javafx.scene.paint.Color;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
+import dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt;
+import dk.dtu.compute.se.pisd.roborally.model.Heading;
+
+import dk.dtu.compute.se.pisd.roborally.fileaccess.model.ConveyorBeltTemplate; // ✅ Added import
+import dk.dtu.compute.se.pisd.roborally.model.Heading;  // ✅ Added import
+
 
 
 /**
@@ -133,7 +139,29 @@ public class SpaceView extends StackPane implements ViewObserver {
 
                 this.getChildren().add(wall);
             }
+            // ✅ Render Conveyor Belts
+            for (FieldAction action : space.getActions()) {
+                if (action instanceof ConveyorBelt) {
+                    ConveyorBelt conveyor = (ConveyorBelt) action;
+                    System.out.println("🔄 Rendering Conveyor Belt at (" + space.x+ ", " + space.y + ") heading " + conveyor.getHeading());
 
+                    // Draw an arrow to represent the conveyor belt
+                    Polygon arrow = new Polygon(0.0, 0.0,
+                            10.0, 20.0,
+                            20.0, 0.0);
+                    arrow.setFill(Color.PINK);
+
+                    // Rotate based on conveyor belt direction
+                    switch (conveyor.getHeading()) {
+                        case NORTH -> arrow.setRotate(0);
+                        case EAST -> arrow.setRotate(90);
+                        case SOUTH -> arrow.setRotate(180);
+                        case WEST -> arrow.setRotate(270);
+                    }
+
+                    this.getChildren().add(arrow);
+                }
+            }
             // ✅ Render Checkpoints
             for (FieldAction action : space.getActions()) {
                 if (action instanceof Checkpoint) {
