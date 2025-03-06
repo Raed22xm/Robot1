@@ -73,44 +73,55 @@ public class BoardFactory {
         board.getSpace(3, 3).getActions().add(conveyor);
 
         // 🔹 Add Checkpoints
-        addCheckpoint(board, 1, 1, 1);
-        addCheckpoint(board, 5, 5, 2);
-        addCheckpoint(board, 7, 7, 3);
+        addCheckpoint(board, 3, 1, 1);
+        addCheckpoint(board, 3, 7, 2);
+        addCheckpoint(board, 6, 3, 3);
         // Configure board elements using addWall helper method
-        addWall(board, 0, 0, Heading.SOUTH);
+        /**
+         * Here we add some walls
+         * @Raed
+         */
         addWall(board, 2, 2, Heading.WEST);
         addWall(board, 4, 4, Heading.EAST);
 
         // Add walls for the specified spaces using addWall
-        addWall(board, 1, 0, Heading.NORTH);
         addWall(board, 1, 1, Heading.WEST);
         addWall(board, 5, 5, Heading.SOUTH);
         // 🔹 Add Conveyor Belts
+        /**
+         * Here we add some conveyor belts
+         * @Raed
+         */
         addConveyorBelt(board, 3, 3, Heading.NORTH);
         addConveyorBelt(board, 2, 4, Heading.EAST);
         addConveyorBelt(board, 5, 5, Heading.SOUTH);
         addConveyorBelt(board, 6, 2, Heading.WEST);
-
+        /**
+         * Here we add some walls, actions and checkpoints to some spaces
+         */
         // add some walls, actions and checkpoints to some spaces
-        Space space = board.getSpace(0,0);
+        Space space = board.getSpace(4,0);
         space.getWalls().add(Heading.SOUTH);
         ConveyorBelt action  = new ConveyorBelt();
         action.setHeading(Heading.WEST);
         space.getActions().add(action);
-
-        space = board.getSpace(1,0);
+        /**
+         * Here we add some walls, actions and checkpoints to some spaces and conveyor belts
+         * @Raed
+         */
+        space = board.getSpace(5,4);
         space.getWalls().add(Heading.NORTH);
         action  = new ConveyorBelt();
         action.setHeading(Heading.WEST);
         space.getActions().add(action);
 
-        space = board.getSpace(1,1);
+        space = board.getSpace(4,4);
         space.getWalls().add(Heading.WEST);
         action  = new ConveyorBelt();
         action.setHeading(Heading.NORTH);
         space.getActions().add(action);
 
-        space = board.getSpace(5,5);
+        space = board.getSpace(2,5);
         space.getWalls().add(Heading.SOUTH);
         action  = new ConveyorBelt();
         action.setHeading(Heading.WEST);
