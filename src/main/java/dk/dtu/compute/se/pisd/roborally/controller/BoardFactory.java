@@ -134,11 +134,33 @@ public class BoardFactory {
 
         return board;
     }
+
+    /**
+     * Adds a checkpoint to a specified space on the board.
+     *
+     * board the game board where the checkpoint will be added
+     * x the x-coordinate of the space on the board
+     * y the y-coordinate of the space on the board
+     * number the number representing the checkpoint
+     * @Raed
+     */
+
+
     // 🔹 Helper method to add a checkpoint to the board
     private void addCheckpoint(Board board, int x, int y, int number) {
         Checkpoint checkpoint = new Checkpoint(number);
         board.getSpace(x, y).getActions().add(checkpoint);
     }
+
+    /**
+     * Adds a wall to a specified space on the board in the given heading direction.
+     *
+     * board the game board where the wall will be added
+     * x the x-coordinate of the space on the board
+     * y the y-coordinate of the space on the board
+     *  heading the direction in which the wall will be added
+     * @Raed
+     */
     private void addWall(Board board, int x, int y, Heading heading) {
         // First, get the space at the specified coordinates
         Space space = board.getSpace(x, y);
@@ -150,6 +172,17 @@ public class BoardFactory {
         }
     }
 
+    /**
+     * Adds a conveyor belt to the specified location on the board with the given heading direction.
+     *
+     * This helper method creates a new conveyor belt, assigns its heading direction,
+     * and adds it to the actions list of the appropriate space on the board.
+     *  board the game board to which the conveyor belt is added
+     *x the x-coordinate of the space on the board
+     * y the y-coordinate of the space on the board
+     *  direction the heading direction of the conveyor belt
+     * @Raed
+     */
     // ✅ Helper method to add conveyor belts
     private void addConveyorBelt(Board board, int x, int y, Heading direction) {
         ConveyorBelt conveyor = new ConveyorBelt();
