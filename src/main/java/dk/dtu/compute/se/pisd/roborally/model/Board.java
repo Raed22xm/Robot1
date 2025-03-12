@@ -232,11 +232,13 @@ public class Board extends Subject {
         // TODO A3: This implementation needs to be adjusted so that walls on
         //          spaces (and maybe other obstacles) are taken into account
         //          (see above JavaDoc comment for this method).
+        if (space == null) return null;
+
         int x = space.x;
         int y = space.y;
         switch (heading) {
             case SOUTH:
-                y = (y + 1) % height;
+                y = (y + 1) % height;//
                 break;
             case WEST:
                 x = (x + width - 1) % width;
@@ -248,8 +250,19 @@ public class Board extends Subject {
                 x = (x + 1) % width;
                 break;
         }
-
-        return getSpace(x, y);
+        Space neighbour = getSpace(x, y); // Get the potential neighbour space
+        if (neighbour != null) { // check if the neighbour space is not null
+            //check if the neighbour space contains a wall
+            if (space.getWalls().contains(heading)) {
+                return null;
+            }
+            //Check if there's a wall on target space in
+            if (neighbour.getWalls().contains(heading.opposite())) {
+                return null;
+            }
+            return neighbour;
+        }
+        return null;
     }
 
     public String getStatusMessage() {

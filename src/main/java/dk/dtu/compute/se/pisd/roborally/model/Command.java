@@ -34,8 +34,21 @@ public enum Command {
     FORWARD("Fwd"),
     RIGHT("Turn Right"),
     LEFT("Turn Left"),
-    FAST_FORWARD("Fast Fwd");
-
+    FAST_FORWARD("Fast Fwd"),
+    /**
+     * Represents the "Backward" command for a robot or system. This command typically
+     * instructs the robot to move in the reverse direction.
+     * @Raed
+     */
+    BACKWARD("Back"),
+    /**
+     * Represents the "U-Turn" command for a robot or system.
+     * This command typically instructs the robot to reverse its direction
+     * by turning 180 degrees, allowing it to face and move in the
+     * opposite direction of its current orientation.
+     * @Raed
+     */
+    U_TURN("U-Turn");
     final public String displayName;
 
     Command(String displayName) {

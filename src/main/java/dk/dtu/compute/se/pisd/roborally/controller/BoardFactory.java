@@ -19,6 +19,14 @@ public class BoardFactory {
      * The single instance of this class, which is lazily instantiated on demand.
      */
     static private BoardFactory instance = null;
+    /**
+     * A predefined, unmodifiable list of board names available for creation in the factory.
+     * This list includes the different types of boards supported by the BoardFactory.
+     * The list is immutable and consists of the following board names:
+     * - "SimpleBoard"
+     * - "AdvancedBoard"
+     * @Raed
+     */
     private static final List<String> BOARD_NAMES = List.of("SimpleBoard", "AdvancedBoard");
 
     /**

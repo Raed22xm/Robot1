@@ -38,4 +38,23 @@ public enum Heading {
     public Heading prev() {
         return values()[(this.ordinal() + values().length - 1) % values().length];
     }
+
+    // ✅ Add this method to get the opposite heading
+
+    /**
+     * Determines the opposite heading relative to the current one.
+     *
+     * @return the opposite Heading of the current enum constant
+     * @throws IllegalStateException if the current heading is not among the defined constants
+     * @author Raed
+     */
+    public Heading opposite() {
+        switch (this) {
+            case NORTH: return SOUTH;
+            case SOUTH: return NORTH;
+            case EAST: return WEST;
+            case WEST: return EAST;
+            default: throw new IllegalStateException("Unexpected heading: " + this);
+        }
+    }
 }

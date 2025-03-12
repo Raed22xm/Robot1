@@ -23,6 +23,9 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import org.jetbrains.annotations.NotNull;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
+import dk.dtu.compute.se.pisd.roborally.model.Command;
+
 
 /**
  * ...
@@ -192,15 +195,28 @@ public class GameController {
     }
 
     // XXX V2
+
+    /**
+     * Executes a command for the specified player if the conditions are met
+     * (player is not null, belongs to the current board, and the command is valid).
+     * Depending on the type of command, the player will move or turn accordingly.
+     *
+     * @param player the player for whom the command is being executed; must not be null
+     * @param command the command to execute; must not be null
+     */
     private void executeCommand(@NotNull Player player, Command command) {
-        if (player != null && player.board == board && command != null) {
+        // Check if the player and the command are valid
+        if ( player.board == board && command != null) {
             // XXX This is a very simplistic way of dealing with some basic cards and
             //     their execution. This should eventually be done in a more elegant way
             //     (this concerns the way cards are modelled as well as the way they are executed).
 
             switch (command) {
+                case BACKWARD:
+                    this.moveBackward( player);
+                    break;
                 case FORWARD:
-                    this.moveForward(player);
+                    this.moveForward( player);
                     break;
                 case RIGHT:
                     this.turnRight(player);
@@ -210,6 +226,8 @@ public class GameController {
                     break;
                 case FAST_FORWARD:
                     this.fastForward(player);
+                case U_TURN:
+                    this.uTurn(player);
                     break;
                 default:
                     // DO NOTHING (for now)
@@ -219,21 +237,109 @@ public class GameController {
 
     // TODO V2
     public void moveForward(@NotNull Player player) {
+        // Check if the player is valid and belongs to the current board
+     if(player.board == board){
+         Space space = player.getSpace(); // Get the current space of the player
+         Heading heading = player.getHeading(); // Get the current heading of the player
+         if (space != null && heading != null) {
+             // Get the next space based on the player's heading
+             Space target = board.getNeighbour(space, heading);
+             if (target != null) {
+                 // Move the player to the next space
+                 this.moveCurrentPlayerToSpace(target);
+             }
+         }
 
+     }
     }
 
     // TODO V2
+
+    /**
+     * Moves the specified player forward by up to two spaces in the direction of their current heading.
+     * If the first target space exists, the player moves to it. If the second target space also exists
+     * after the first move, the player advances to it as well.
+     *
+     * @param player the player to be moved forward; must not be null
+     * @author Raed
+     */
     public void fastForward(@NotNull Player player) {
-
+    if(player.board == board){
+        Space space = player.getSpace(); // Get the current space of the player
+        Heading heading = player.getHeading(); // Get the current heading of the player
+        if (space != null && heading != null) {
+            // Get the next space based on the player's heading
+            Space firstTarget = board.getNeighbour(space, heading);
+            if (firstTarget != null) {
+                this.moveCurrentPlayerToSpace(firstTarget);
+                Space secondTarget = board.getNeighbour(firstTarget, heading);
+                if (secondTarget != null) {
+                    this.moveCurrentPlayerToSpace(secondTarget);
+                }
+            }
+        }
+    }
     }
 
     // TODO V2
+
+    /**
+     * Turns the specified player 90 degrees to the right.
+     * The player's heading will be updated to the next direction
+     * in the clockwise order on the board.
+     * @param player the player whose heading is to be adjusted; must not be null
+     * @author Raed
+     */
     public void turnRight(@NotNull Player player) {
-
+      if (player.board == board) {
+          player.setHeading(player.getHeading().next());
+      }
     }
 
     // TODO V2
+
+    /**
+     * Turns the specified player 90 degrees to the left.
+     * The player's heading will be updated to the previous direction
+     * in the counter-clockwise order on the board.
+     *
+     * @param player the player whose heading is to be adjusted; must not be null
+     * @author Raed
+     */
     public void turnLeft(@NotNull Player player) {
+     if(player.board == board){
+         player.setHeading(player.getHeading().prev());
+     }
+    }
+
+    /**
+     * Moves the specified player one step backward based on their current heading.
+     * @param player the player to move backward; must not be null
+     * @author Raed
+     */
+    public void moveBackward(@NotNull Player player) {
+     // Insur that the player is valid and belongs to the current board
+        if(player.board == board){
+            Space space = player.getSpace(); // Get the current space of the player
+            Heading oppositeHeading = player.getHeading().opposite();// Get the current heading of the player
+            if (space != null && oppositeHeading != null) {
+                // Get the next space based on the player's heading
+                Space target = board.getNeighbour(space, oppositeHeading);
+                if (target != null) {
+                    // Move the player to the next space
+                    this.moveCurrentPlayerToSpace(target);
+                }
+            }
+        }
+    }
+
+    /**
+     * Adjusts the player's heading by performing a U-turn. The player's heading
+     * will be changed to the opposite direction from its current heading.
+     * @param player the player performing the U-turn; must not be null
+     * @author Raed
+     */
+    public void uTurn(@NotNull Player player) {
 
     }
 
