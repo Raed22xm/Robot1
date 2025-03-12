@@ -343,14 +343,29 @@ public class GameController {
 
     }
 
+    /**
+     * Moves a command card from the source field to the target field if the source field contains
+     * a card and the target field is empty. After the operation, the source field is cleared and
+     * the target field holds the card from the source.
+     *
+     * @param source the CommandCardField containing the card to be moved, must not be null
+     * @param target the CommandCardField where the card will be placed, must not be null
+     * @return true if the card was successfully moved, false otherwise
+     */
     public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {
+       //get the cards from both source and target
         CommandCard sourceCard = source.getCard();
         CommandCard targetCard = target.getCard();
+        //check if the source card is not null and the target card is null
+        //so meaning the source card has a card and target is empty
         if (sourceCard != null && targetCard == null) {
+            //move the card from source to target
             target.setCard(sourceCard);
+            //remove the card from source, meaning clear the sources filed
             source.setCard(null);
             return true;
         } else {
+            //Cannot move cards if source is empty  or target is not empty
             return false;
         }
     }

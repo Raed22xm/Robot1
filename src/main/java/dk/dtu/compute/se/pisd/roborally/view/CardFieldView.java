@@ -227,64 +227,90 @@ public class CardFieldView extends GridPane implements ViewObserver {
 
     }
 
+    /**
+     * The OnDragDroppedHandler class handles the drag-and-drop functionality for transferring
+     * command cards between card fields within the game interface. It ensures valid source and target
+     * fields are specified, and moves the card only if the target field is empty and the source field
+     * contains a card. After attempting a move, it sets the result of the drop operation accordingly
+     * and consumes the drag event.
+     *
+     * This class is intended to be used exclusively with the game controller and card field views
+     * in the RoboRally application.
+     *
+     * Responsibilities:
+     * - Validates drag-and-drop operations for source and target fields.
+     * - Ensures compatibility between the source and target fields.
+     * - Invokes the game controller's moveCards() method to perform the actual card transfer.
+     * - Updates drop completion status based on the success of the operation.
+     * - Consumes the drag event after handling.
+     *
+     * Event Handling Details:
+     * - Rejects invalid drag-and-drop scenarios, such as null game controllers,
+     *   missing source or target fields, or non-compatible targets.
+     * - Calls gameController.moveCards() to execute the card movement if validations are successful.
+     * - Consumes the drag event to signal completion.
+     *
+     * Implements:
+     * - EventHandler<DragEvent>, enabling handling of drag-and-drop events specific to card movement.
+     *
+     * Note:
+     * - This handler is tightly coupled to the CardFieldView class and relies on its structure and
+     *   the associated gameController instance.
+     * @author Raed
+     */
     private class OnDragDroppedHandler implements EventHandler<DragEvent> {
-
         @Override
         public void handle(DragEvent event) {
+            // ✅ Ensure gameController is not null
+            if (gameController == null) {
+                event.setDropCompleted(false);
+                event.consume();
+                return;
+            }
+
             Object t = event.getTarget();
             if (t instanceof CardFieldView) {
                 CardFieldView target = (CardFieldView) t;
-                CommandCardField cardField = target.field;
+                CommandCardField targetField = target.field;
 
                 Dragboard db = event.getDragboard();
-                if (cardField != null &&
-                        cardField.getCard() == null &&
-                        cardField.player != null &&
-                        cardField.player.board != null) {
-                    if (event.getGestureSource() != target &&
-                            db.hasContent(ROBO_RALLY_CARD)) {
-                        Object object = db.getContent(ROBO_RALLY_CARD);
-                        if (object instanceof Integer) {
-                            int number = (Integer) object;
-                            if (number < Command.values().length) {
-                                Command command = Command.values()[number];
-                                cardField.setCard(new CommandCard(command));
-                                event.setDropCompleted(true);
-                                event.consume();
-                                return;
-                            }
+                if (targetField != null && targetField.getCard() == null) {
+                    if (event.getGestureSource() instanceof CardFieldView) {
+                        CardFieldView source = (CardFieldView) event.getGestureSource();
+                        CommandCardField sourceField = source.field;
+
+                        if (sourceField != null && sourceField.getCard() != null) {
+                            // ✅ Use moveCards() and match correct parameters
+                            boolean success = gameController.moveCards(sourceField, targetField);
+                            event.setDropCompleted(success);
+                            event.consume();
+                            return;
                         }
                     }
                 }
-                event.setDropCompleted(false);
-                target.setBackground(BG_NONE);
             }
+            event.setDropCompleted(false);
             event.consume();
         }
-
     }
 
-    private class OnDragDoneHandler implements EventHandler<DragEvent> {
 
+    private class OnDragDoneHandler implements EventHandler<DragEvent> {
         @Override
         public void handle(DragEvent event) {
             Object t = event.getTarget();
             if (t instanceof CardFieldView) {
                 CardFieldView source = (CardFieldView) t;
                 if (event.isAccepted()) {
-                    source.field.setCard(null);
-                    // the view will update automatically since the field changed
-                    // source.setBackground(BG_NONE);
+                    source.field.setCard(null); // ✅ Clear the source register after moving
                 } else {
-                    // leave the card on the field, since drag and drop was cancelled
-                    // just switch back to defaut colour of a card
-                    source.setBackground(BG_DEFAULT);
+                    source.setBackground(BG_DEFAULT); // Reset color if move is canceled
                 }
             }
             event.consume();
         }
-
     }
+
 
 }
 
