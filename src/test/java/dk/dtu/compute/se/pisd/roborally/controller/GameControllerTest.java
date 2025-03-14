@@ -46,8 +46,8 @@ class GameControllerTest {
         Assertions.assertEquals(player, board.getSpace(0, 4).getPlayer(), "Player " + player.getName() + " should be on Space (0,4)!");
     }
 
-    /*
-        The following tests should be used later for assignment V2
+
+       // The following tests should be used later for assignment V2
 
     @Test
     void moveCurrentPlayerToSpace() {
@@ -74,8 +74,45 @@ class GameControllerTest {
         Assertions.assertNull(board.getSpace(0, 0).getPlayer(), "Space (0,0) should be empty!");
     }
 
-     */
+
 
     // TDOD and there should be more tests added for the different assignments eventually
+    @Test
+
+    /** here is a test for player rotation, where the player should be able to turn left and right
+     * @author Raed
+     *
+     */
+    void testPlayerRotation() {
+        Board board = gameController.board;
+        Player current = board.getCurrentPlayer();
+        Heading initialHeading = current.getHeading();
+
+        // Test turning right
+        gameController.turnRight(current);
+        Heading expectedHeading = Heading.values()[(initialHeading.ordinal() + 1) % Heading.values().length];
+        Assertions.assertEquals(expectedHeading, current.getHeading(),
+                "Player should be facing " + expectedHeading + " after turning right");
+
+        // Test turning left
+        gameController.turnLeft(current);
+        Assertions.assertEquals(initialHeading, current.getHeading(),
+                "Player should be back to initial heading after turning left");
+    }
+
+    @Test
+    void testMoveToOccupiedSpace() {
+        Board board = gameController.board;
+        Player player1 = board.getPlayer(0);
+        Player player2 = board.getPlayer(1);
+
+        // Try to move player1 to player2's space
+        gameController.moveCurrentPlayerToSpace(player2.getSpace());
+
+        // Player1 should not have moved
+        Assertions.assertNotEquals(player2.getSpace(), player1.getSpace(),
+                "Player should not be able to move to an occupied space");
+    }
+
 
 }

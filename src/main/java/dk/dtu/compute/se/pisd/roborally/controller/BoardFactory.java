@@ -189,7 +189,7 @@ public class BoardFactory {
      *x the x-coordinate of the space on the board
      * y the y-coordinate of the space on the board
      *  direction the heading direction of the conveyor belt
-     * @Raed
+     * @author Raed
      */
     // ✅ Helper method to add conveyor belts
     private void addConveyorBelt(Board board, int x, int y, Heading direction) {

@@ -264,21 +264,8 @@ public class GameController {
      * @author Raed
      */
     public void fastForward(@NotNull Player player) {
-    if(player.board == board){
-        Space space = player.getSpace(); // Get the current space of the player
-        Heading heading = player.getHeading(); // Get the current heading of the player
-        if (space != null && heading != null) {
-            // Get the next space based on the player's heading
-            Space firstTarget = board.getNeighbour(space, heading);
-            if (firstTarget != null) {
-                this.moveCurrentPlayerToSpace(firstTarget);
-                Space secondTarget = board.getNeighbour(firstTarget, heading);
-                if (secondTarget != null) {
-                    this.moveCurrentPlayerToSpace(secondTarget);
-                }
-            }
-        }
-    }
+     moveForward(player);
+     moveForward(player);
     }
 
     // TODO V2
