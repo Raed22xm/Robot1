@@ -59,6 +59,8 @@ public class Board extends Subject {
 
     private boolean stepMode;
 
+    private String statusMessage = "";
+
     // existing fields...
     private int counter = 0; // <--- move counter
     /**
@@ -66,6 +68,7 @@ public class Board extends Subject {
      *
      * @return how many moves have been made so far
      */
+    private int totalCheckpoints = 0;  // Add this field
 
     public int getCounter() {
         return this.counter;
@@ -266,19 +269,36 @@ public class Board extends Subject {
     }
 
     public String getStatusMessage() {
-        // Some existing message logic here:
         String currentStatus = "";
 
         if (current != null) {
-            currentStatus = "Current Player: " + current.getName();
+            currentStatus = "Current Player: " + current.getName() +
+                    " | Moves: " + counter +
+                    " | Checkpoints Reached: " + current.getReachedCheckpoints() +
+                    "/" + totalCheckpoints;
         } else {
             currentStatus = "No current player found";
         }
 
-        // TODO V1: add the move count to the status message
-        currentStatus += " | Moves so far: " + counter;
-
         return currentStatus;
+    }
+
+    public int getTotalCheckpoints() {
+        return totalCheckpoints;
+    }
+    public void setTotalCheckpoints(int total) {
+        if (this.totalCheckpoints != total) {
+            this.totalCheckpoints = total;
+            notifyChange(); // ✅ Notify UI updates
+        }
+    }
+
+    public void setStatusMessage(String message) {
+        if (phase == Phase.FINISHED) {
+            message += " 🎉 The game has ended!";
+        }
+        this.statusMessage = message;
+        notifyChange();
     }
 
 

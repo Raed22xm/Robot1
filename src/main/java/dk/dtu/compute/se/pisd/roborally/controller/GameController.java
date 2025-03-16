@@ -22,9 +22,13 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import javafx.scene.control.Alert;
 import org.jetbrains.annotations.NotNull;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Command;
+import javafx.scene.control.Alert;
+
+import java.util.ArrayList;
 
 
 /**
@@ -327,6 +331,7 @@ public class GameController {
      * @author Raed
      */
     public void uTurn(@NotNull Player player) {
+        player.setHeading(player.getHeading().opposite());
 
     }
 
@@ -365,5 +370,33 @@ public class GameController {
         // XXX just for now to indicate that the actual method is not yet implemented
         assert false;
     }
+
+    public void showWinnerPopup(Player player) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Game Over");
+        alert.setHeaderText("Winner!");
+        alert.setContentText(player.getName() + " has won the game!");
+        alert.showAndWait();
+    }
+    public Board getBoard() {
+        return board;
+    }
+    public void setGamePhase(Phase phase) {
+        board.setPhase(phase);
+    }
+
+    /**
+     * Updates the status message in the game UI based on the current game state.
+     * This message typically shows whose turn it is and what phase the game is in.
+     *
+     * @param message The message to display in the status area.
+     */
+    public void updateStatusMessage(String message) {
+        System.out.println("[STATUS] " + message); // ✅ Print message in console for debugging
+        board.setStatusMessage(message); // ✅ Make sure `board.setStatusMessage()` exists
+    }
+
+
+
 
 }

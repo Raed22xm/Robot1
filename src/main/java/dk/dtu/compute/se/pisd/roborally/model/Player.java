@@ -48,6 +48,9 @@ public class Player extends Subject {
     private CommandCardField[] program;
     private CommandCardField[] cards;
 
+    private int reachedCheckpoints = 0;
+
+
     public Player(@NotNull Board board, String color, @NotNull String name) {
         this.board = board;
         this.name = name;
@@ -132,5 +135,14 @@ public class Player extends Subject {
     public CommandCardField getCardField(int i) {
         return cards[i];
     }
+    public int getReachedCheckpoints() {
+        return reachedCheckpoints;
+    }
+    public void incrementCheckpoints() {
+        this.reachedCheckpoints++;
+        System.out.println("DEBUG: Player " + name + " now has " + reachedCheckpoints + " checkpoints!");
+        notifyChange();  // ✅ Ensure UI updates when checkpoint count changes
+    }
+
 
 }
