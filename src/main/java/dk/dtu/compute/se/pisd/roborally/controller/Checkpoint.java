@@ -33,20 +33,25 @@ public class Checkpoint extends FieldAction {
         }
 
         Player player = space.getPlayer();
+        System.out.println("🚀 Player " + player.getName() + " reached Checkpoint " + number);
 
-        // ✅ Print a message in the console
-        System.out.println("Player " + player.getName() + " reached Checkpoint " + number);
-
+        // ✅ Tjek om spilleren allerede har registreret dette checkpoint
         if (number > player.getReachedCheckpoints()) {
             player.incrementCheckpoints();
-            gameController.getBoard().setTotalCheckpoints(number); // ✅ Keep track of total checkpoints
+            System.out.println("✅ Player " + player.getName() + " checkpoint updated: " + player.getReachedCheckpoints());
+
+            // ✅ Opdater det totale antal checkpoints, hvis dette er højere end tidligere sat
+            if (number > gameController.getBoard().getTotalCheckpoints()) {
+                gameController.getBoard().setTotalCheckpoints(number);
+            }
+
+            // ✅ Opdater UI status
             gameController.updateStatusMessage("Player " + player.getName() +
-                    " reached Checkpoint " + number + " | Total Reached: " + player.getReachedCheckpoints());
+                    " reached Checkpoint " + number + " | Total Reached: " + player.getReachedCheckpoints() + "/" + gameController.getBoard().getTotalCheckpoints());
         }
 
-
-        // ✅ If it's the last checkpoint, show a winner popup
-        if (number == gameController.getBoard().getTotalCheckpoints()) {
+        // ✅ Hvis det er det sidste checkpoint, afslut spillet
+        if (player.getReachedCheckpoints() == gameController.getBoard().getTotalCheckpoints()) {
             gameController.setGamePhase(Phase.FINISHED);
             gameController.showWinnerPopup(player);
             return true;

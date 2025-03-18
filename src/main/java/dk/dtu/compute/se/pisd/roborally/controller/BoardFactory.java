@@ -1,46 +1,27 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
-import dk.dtu.compute.se.pisd.roborally.controller.Checkpoint;
 
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
+import dk.dtu.compute.se.pisd.roborally.controller.Checkpoint;
+
+
 import java.util.List;
 import java.util.Collections;
-import java.util.ArrayList;
+
 /**
  * A factory for creating boards. The factory itself is implemented as a singleton.
  *
- * @author Ekkart Kindler, ekki@dtu.dk
+ * @author Muhammad Feyaz
  */
-// XXX A3: might be used for creating a first slightly more interesting board.
 public class BoardFactory {
 
-    /**
-     * The single instance of this class, which is lazily instantiated on demand.
-     */
-    static private BoardFactory instance = null;
-    /**
-     * A predefined, unmodifiable list of board names available for creation in the factory.
-     * This list includes the different types of boards supported by the BoardFactory.
-     * The list is immutable and consists of the following board names:
-     * - "SimpleBoard"
-     * - "AdvancedBoard"
-     * @Raed
-     */
+    private static BoardFactory instance = null;
     private static final List<String> BOARD_NAMES = List.of("SimpleBoard", "AdvancedBoard");
 
-    /**
-     * Constructor for BoardFactory. It is private in order to make the factory a singleton.
-     */
     private BoardFactory() {
     }
 
-    /**
-     * Returns the single instance of this factory. The instance is lazily
-     * instantiated when requested for the first time.
-     *
-     * @return the single instance of the BoardFactory
-     */
     public static BoardFactory getInstance() {
         if (instance == null) {
             instance = new BoardFactory();
@@ -48,155 +29,61 @@ public class BoardFactory {
         return instance;
     }
 
-    /**
-     * Retrieves the list of board names available in the factory.
-     * The returned list is unmodifiable.
-     *
-     * @return an unmodifiable list of board names
-     */
     public List<String> getBoardNames() {
         return Collections.unmodifiableList(BOARD_NAMES);
     }
-    /**
-     * Creates a new board of given name of a board, which indicates
-     * which type of board should be created. For now the name is ignored.
-     *
-     * @param name the given name board
-     * @return the new board corresponding to that name
-     */
+
     public Board createBoard(String name) {
         if (name == null) {
             name = "<none>";
         }
         Board board = new Board(8, 8, name);
 
-        // Configure board elements (walls)
-        board.getSpace(0, 0).getWalls().add(Heading.SOUTH);
-        board.getSpace(2, 2).getWalls().add(Heading.WEST);
-        board.getSpace(4, 4).getWalls().add(Heading.EAST);
-
-        // Add Conveyor Belt
-        ConveyorBelt conveyor = new ConveyorBelt();
-        conveyor.setHeading(Heading.NORTH);
-        board.getSpace(3, 3).getActions().add(conveyor);
-
-        // 🔹 Add Checkpoints
-        addCheckpoint(board, 3, 1, 1);
-        addCheckpoint(board, 3, 7, 2);
-        addCheckpoint(board, 6, 3, 3);
-        // Configure board elements using addWall helper method
-        /**
-         * Here we add some walls
-         * @Raed
-         */
+        // 🔹 Tilføj vægge
         addWall(board, 2, 2, Heading.WEST);
         addWall(board, 4, 4, Heading.EAST);
-
-        // Add walls for the specified spaces using addWall
         addWall(board, 1, 1, Heading.WEST);
         addWall(board, 5, 5, Heading.SOUTH);
-        // 🔹 Add Conveyor Belts
-        /**
-         * Here we add some conveyor belts
-         * @Raed
-         */
+
+        // 🔹 Tilføj Conveyor Belts
         addConveyorBelt(board, 3, 3, Heading.NORTH);
         addConveyorBelt(board, 2, 4, Heading.EAST);
         addConveyorBelt(board, 5, 5, Heading.SOUTH);
         addConveyorBelt(board, 6, 2, Heading.WEST);
-        /**
-         * Here we add some walls, actions and checkpoints to some spaces
-         */
-        // add some walls, actions and checkpoints to some spaces
-        Space space = board.getSpace(4,0);
-        space.getWalls().add(Heading.SOUTH);
-        ConveyorBelt action  = new ConveyorBelt();
-        action.setHeading(Heading.WEST);
-        space.getActions().add(action);
-        /**
-         * Here we add some walls, actions and checkpoints to some spaces and conveyor belts
-         * @Raed
-         */
-        space = board.getSpace(5,4);
-        space.getWalls().add(Heading.NORTH);
-        action  = new ConveyorBelt();
-        action.setHeading(Heading.WEST);
-        space.getActions().add(action);
 
-        space = board.getSpace(4,4);
-        space.getWalls().add(Heading.WEST);
-        action  = new ConveyorBelt();
-        action.setHeading(Heading.NORTH);
-        space.getActions().add(action);
-
-        space = board.getSpace(2,5);
-        space.getWalls().add(Heading.SOUTH);
-        action  = new ConveyorBelt();
-        action.setHeading(Heading.WEST);
-        space.getActions().add(action);
-
-        space = board.getSpace(6,5);
-        action  = new ConveyorBelt();
-        action.setHeading(Heading.WEST);
-        space.getActions().add(action);
+        // 🔹 Tilføj Checkpoints
+        addCheckpoint(board, 3, 1, 1);
+        addCheckpoint(board, 3, 7, 2);
+        addCheckpoint(board, 6, 3, 3);
 
         return board;
     }
 
     /**
-     * Adds a checkpoint to a specified space on the board.
-     *
-     * board the game board where the checkpoint will be added
-     * x the x-coordinate of the space on the board
-     * y the y-coordinate of the space on the board
-     * number the number representing the checkpoint
-     * @Raed
+     * 🔹 Tilføjer et checkpoint til et felt
      */
-
-
-    // 🔹 Helper method to add a checkpoint to the board
     private void addCheckpoint(Board board, int x, int y, int number) {
         Checkpoint checkpoint = new Checkpoint(number);
         board.getSpace(x, y).getActions().add(checkpoint);
+        System.out.println("🏁 Checkpoint " + number + " added at (" + x + ", " + y + ")");
     }
 
     /**
-     * Adds a wall to a specified space on the board in the given heading direction.
-     *
-     * board the game board where the wall will be added
-     * x the x-coordinate of the space on the board
-     * y the y-coordinate of the space on the board
-     *  heading the direction in which the wall will be added
-     * @Raed
+     * 🔹 Tilføjer en væg til et felt
      */
     private void addWall(Board board, int x, int y, Heading heading) {
-        // First, get the space at the specified coordinates
         Space space = board.getSpace(x, y);
-
-        // Check if the space exists
         if (space != null) {
-            // Add a wall in the specified direction to that space
             space.getWalls().add(heading);
         }
     }
 
     /**
-     * Adds a conveyor belt to the specified location on the board with the given heading direction.
-     *
-     * This helper method creates a new conveyor belt, assigns its heading direction,
-     * and adds it to the actions list of the appropriate space on the board.
-     *  board the game board to which the conveyor belt is added
-     *x the x-coordinate of the space on the board
-     * y the y-coordinate of the space on the board
-     *  direction the heading direction of the conveyor belt
-     * @author Raed
+     * 🔹 Tilføjer en transportbånd (Conveyor Belt)
      */
-    // ✅ Helper method to add conveyor belts
     private void addConveyorBelt(Board board, int x, int y, Heading direction) {
-        ConveyorBelt conveyor = new ConveyorBelt();
-        conveyor.setHeading(direction);
+        ConveyorBelt conveyor = new ConveyorBelt(direction);
         board.getSpace(x, y).getActions().add(conveyor);
         System.out.println("🔄 Conveyor Belt added at (" + x + ", " + y + ") heading " + direction);
     }
-
 }
