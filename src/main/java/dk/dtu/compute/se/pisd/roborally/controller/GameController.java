@@ -70,6 +70,21 @@ public class GameController {
             space.setPlayer(currentPlayer);
             currentPlayer.setSpace(space);
 
+            if(space.getActions() != null) {
+                FieldAction action = space.getActions().getFirst();
+                if (action instanceof Checkpoint) {
+                    Checkpoint checkpoint = (Checkpoint) action;
+                    checkpoint.doAction(this,space);
+                }
+                if(action instanceof ConveyorBelt){
+                    ConveyorBelt belt = (ConveyorBelt) action;
+                    belt.doAction(this,space);
+                }
+            }
+
+
+
+
             // 5. Increment the board’s move counter
             board.setCounter(board.getCounter() + 1);
 
